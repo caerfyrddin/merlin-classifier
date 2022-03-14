@@ -12,7 +12,3 @@ class Utils:
             return self[:-len(suffix)]
         else:
             return self[:]
-
-    @staticmethod
-    def log(function_name: str, text: str):
-        print('log -', function_name + ':', text)
