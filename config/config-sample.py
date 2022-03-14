@@ -5,8 +5,15 @@ class FlaskConfig:
     DEBUG = True
     TEST = True
 
-    SECRET_KEY = 'oiaunf9eciojmwff90u0e'
+    SECRET_KEY = 'CHANGE_THIS'
 
 class Config:
     appName = "Merlin Classifier"
     dataDirectory = os.path.expanduser("~/Merlin/Data")
+
+    dbConfig = {
+        "host": "localhost",
+        "user": "CHANGE_THIS",
+        "password": "CHANGE_THIS",
+        "database": "merlin"
+    }

@@ -3,6 +3,7 @@ import os
 import traceback
 from flask import Flask
 from app.dispatcher import Dispatcher
+import mysql.connector
 
 from config.config import Config, FlaskConfig
 
@@ -10,7 +11,8 @@ g_config_file = 'config/config.py'
 g_required_config = {
     'appName': str,
     'dataDirectory': str,
-    'flaskConfig': FlaskConfig
+    'flaskConfig': FlaskConfig,
+    'dbConfig': dict
 }
 
 logging.basicConfig(level = logging.WARNING)
@@ -43,6 +45,15 @@ class App:
         App.instance.root = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
         App.instance.config = config
         App.instance.validateConfig()
+
+        log.debug('Initializing the database connection')
+
+        App.instance.db = mysql.connector.connect(
+            host = config.dbConfig['host'],
+            user = config.dbConfig['user'],
+            password = config.dbConfig['password'],
+            database = config.dbConfig['database']
+        )
         
         log.debug('Initializing Flask')
 
