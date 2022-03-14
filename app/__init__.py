@@ -1,6 +1,8 @@
+import logging
 import os
-import json
+import traceback
 from flask import Flask
+from app.dispatcher import Dispatcher
 
 from config.config import Config, FlaskConfig
 
@@ -11,8 +13,14 @@ g_required_config = {
     'flaskConfig': FlaskConfig
 }
 
+logging.basicConfig(level = logging.WARNING)
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+
 class App:
     instance = None
+
+    test = 0
 
     def validateConfig(self) -> bool:
         for key in g_required_config:
@@ -29,16 +37,24 @@ class App:
         if App.instance is not None:
             raise RuntimeError('App has already been initialized.')
 
+        log.debug('Initializing app')
+
         App.instance = App()
         App.instance.root = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
         App.instance.config = config
         App.instance.validateConfig()
         
+        log.debug('Initializing Flask')
+
         App.instance.flask = flask
         from app import routes
 
         App.instance.flask.config.from_object(App.instance.config.flaskConfig)
 
+        App.instance.dispatcher = Dispatcher()
+
     @staticmethod
     def run():
+        log.debug('Running app')
+
         App.instance.flask.run()
