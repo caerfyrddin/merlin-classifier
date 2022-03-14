@@ -33,7 +33,10 @@ class App:
         App.instance.root = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
         App.instance.config = config
         App.instance.validateConfig()
+        
         App.instance.flask = flask
+        from app import routes
+
         App.instance.flask.config.from_object(App.instance.config.flaskConfig)
 
     @staticmethod
