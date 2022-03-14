@@ -29,4 +29,16 @@ class App:
         except KeyError as exc:
             raise RuntimeError('Invalid config file') from exc
 
+        class FlaskConfig:
+            ENV = 'developement'
+            DEBUG = True
+            TEST = True
+
+            SECRET_KEY = 'oiaunf9eciojmwff90u0e'
+
         App.instance.flask = flask
+        App.instance.flask.config.from_object(FlaskConfig())
+
+    @staticmethod
+    def run():
+        App.instance.flask.run()
