@@ -1,8 +1,7 @@
-
-
 import logging
 import threading
-import time
+
+from app.models.photo import Photo
 
 log = logging.getLogger('app')
 
@@ -12,14 +11,29 @@ class Dispatcher:
 
     def process_pending_images(self):
         log.debug('Started dispatch')
-        i = 0
 
-        while i < 8:
-            print(i)
+        while True:
+            photos = Photo.db_fetch_pending()
 
-            i += 1
+            if len(photos) == 0:
+                break
 
-            time.sleep(2)
+            for photo in photos:
+                pass
+
+                # Detect faces
+
+                # for face in faces:
+
+                    # Generate embedding
+
+                    # class = Classify
+
+                    # photo.addClass
+
+                    # Update mean embedding
+
+            break
             
         log.debug('Ended dispatch')
         self.running = False

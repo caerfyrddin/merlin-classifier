@@ -10,12 +10,3 @@ def wakeup():
     App.instance.dispatcher.run()
 
     return ('', G_HTTP_NO_CONTENT)
-
-@flask.route('/testdb')
-def testdb():
-    pending = Photo.db_fetch_pending()
-
-    for item in pending:
-        print(item)
-
-    return ('', G_HTTP_NO_CONTENT)

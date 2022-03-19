@@ -1,19 +1,17 @@
 from app import App
+from app.utils import Utils
+from app.models.image_file_type import ImageFileType
 
 class Photo:
     def __init__(
         self,
-        id,
-        owner_id,
-        processing_status,
-        created_at,
-        modified_at
+        id: int,
+        owner_id: int,
+        file_type: ImageFileType
     ):
         self.id = id
         self.owner_id = owner_id
-        self.processing_status = processing_status
-        self.created_at = created_at
-        self.modified_at = modified_at
+        self.file_type = file_type
 
     @staticmethod
     def db_fetch_pending() -> list:
@@ -21,8 +19,31 @@ class Photo:
 
         cursor = App.instance.db.cursor()
 
-        cursor.execute("SELECT * FROM photos WHERE sync_status = 'synced' AND processing_status = 'pending'")
+        cursor.execute("SELECT id, owner, file_type FROM photos WHERE sync_status = 'synced' AND processing_status = 'pending' LIMIT 5")
 
         result = cursor.fetchall()
 
-        return result
+        photos = []
+
+        for photo in result:
+            photos.append(Photo(
+                photo[0],
+                photo[1],
+                ImageFileType[photo[2]]
+            ))
+
+        return photos
+
+    def get_file_name(self) -> str:
+        return Utils.int_to_16_byte_hex(self.id)
+
+    def __str__(self):
+        return ("Photo: {{\n"
+            "    id: {},\n"
+            "    owner_id: {},\n"
+            "    file_type: {}\n"
+            "}}").format(
+                self.id,
+                self.owner_id,
+                self.file_type
+            )
