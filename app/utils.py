@@ -14,5 +14,6 @@ class Utils:
             return self[:]
 
     @staticmethod
-    def log(function_name: str, text: str):
-        print('log -', function_name + ':', text)
+    def int_to_16_byte_hex(i: int) -> str:
+        s = hex(i)[2:].rjust(16, '0')
+        return '-'.join([ s[0:4], s[4:8], s[8:12], s[12:16] ])
